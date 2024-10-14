@@ -1,0 +1,15 @@
+version: '3.9'
+services:
+  data-base:
+    image: postgres:latest
+    container_name: bookhub-container
+    hostname: postgresql
+    volumes:
+      - /var/lib/postgresql/bookhub
+
+    environment:
+      POSTGRES_DB: 'bookhub-db'
+      POSTGRES_USER: 'jetbill'
+      POSTGRES_PASSWORD: 'jetbill123'
+    ports:
+      - '5432:5432'
