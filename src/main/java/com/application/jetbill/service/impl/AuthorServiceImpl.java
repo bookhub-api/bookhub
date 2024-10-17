@@ -8,6 +8,7 @@ import com.application.jetbill.model.entity.Author;
 import com.application.jetbill.repository.AuthorRepository;
 import com.application.jetbill.service.AuthorService;
 import lombok.AllArgsConstructor;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -65,10 +66,16 @@ public class AuthorServiceImpl implements AuthorService {
     public AuthorDTO update(Integer id, AuthorDTO updateAuthorDTO) {
         Author authorFromDb = authorRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("El autor con ID " + id + " no fue encontrado"));
-        if (authorRepository.existsByFirstNameAndLastNameAndIdNot(
-                updateAuthorDTO.getFirstName(), updateAuthorDTO.getLastName(), id)) {
-            throw new BadRequestException("Ya existe un autor con el mismo nombre y apellido");
+        try {
+            if (authorRepository.existsByFirstNameAndLastNameAndIdNot(
+                    updateAuthorDTO.getFirstName(), updateAuthorDTO.getLastName(), id)) {
+                throw new BadRequestException("Ya existe un autor con el mismo nombre y apellido");
+            }
+
+        }catch (DataIntegrityViolationException e){
+            throw new BadRequestException("Autor duplicado", e);
         }
+
         // Actualizar los campos necesarios
         authorFromDb.setFirstName(updateAuthorDTO.getFirstName());
         authorFromDb.setLastName(updateAuthorDTO.getLastName());
