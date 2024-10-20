@@ -7,7 +7,6 @@ import com.application.jetbill.repository.UserRepository;
 import com.application.jetbill.service.UserService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.hibernate.ObjectNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
