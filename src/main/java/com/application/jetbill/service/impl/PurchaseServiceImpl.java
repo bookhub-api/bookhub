@@ -31,17 +31,25 @@ public class PurchaseServiceImpl implements PurchaseService {
     public PurchaseDTO createPurchase(PurchaseCreateDTO purchaseCreateDTO) {
         //Convertir PurchaseCreateDTO a Purchase
         Purchase purchase = purchaseMapper.toPurchaseCreateDTO(purchaseCreateDTO);
+        // Verificar si los libros existen en la base de datos antes de proceder
+        purchase.getItems().forEach(item -> {
+            Book book = bookRepository.findById(item.getBook().getId())
+                    .orElseThrow(() -> new RuntimeException("Book not found with ID: " + item.getBook().getId()));
+            item.setBook(book); // Asociar el libro existente al PurchaseItem
+            item.setPurchase(purchase); // Asociar el PurchaseItem a la compra actual
+        });
+        purchase.setCreatedAt(LocalDateTime.now());
+        purchase.setPaymentStatus(PaymentStatus.PENDING);
+
+        // Calcular el total basado en la cantidad de libros comprados
         Float total = purchase.getItems()
                 .stream()
                 .map(item -> item.getPrice() * item.getQuantity())
                 .reduce(0f, Float::sum);
 
-        purchase.setCreatedAt(LocalDateTime.now());
-        purchase.setPaymentStatus(PaymentStatus.PENDING);
-        purchase.setTotal(total);
-        purchase.getItems().forEach(item -> item.setPurchase(purchase));
-        Purchase savePurchase = purchaseRepository.save(purchase);
-        return purchaseMapper.toPurchaseDTO(savePurchase);
+        purchase.setTotal(total);//se asigna el total de la compra
+        Purchase savedPurchase = purchaseRepository.save(purchase);
+        return purchaseMapper.toPurchaseDTO(savedPurchase);
     }
 
     @Override
