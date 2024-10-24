@@ -3,6 +3,7 @@ package com.application.jetbill.api;
 
 import com.application.jetbill.dto.PurchaseCreateDTO;
 import com.application.jetbill.dto.PurchaseDTO;
+import com.application.jetbill.dto.PurchaseReportDTO;
 import com.application.jetbill.service.PurchaseService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -30,6 +31,12 @@ public class PurchaseController {
         List<PurchaseDTO> purchaseHistory = purchaseService.getPurchaseHistoryByUserId(userId);
         return ResponseEntity.ok(purchaseHistory);
     }
+
+    @GetMapping("/report")
+    public ResponseEntity<List<PurchaseReportDTO>> getPurchaseReport(){
+        List<PurchaseReportDTO> reports = purchaseService.getPurchaseReportByDate();
+        return ResponseEntity.ok(reports);
+    }
 /*
     @GetMapping
     public ResponseEntity<List<Purchase>> listAllPurchases() {
@@ -37,11 +44,7 @@ public class PurchaseController {
         return ResponseEntity.ok(purchases);
     }
 
-    @GetMapping("/report")
-    public ResponseEntity<List<PurchaseReportDTO>> getPurchaseReport(){
-        List<PurchaseReportDTO> reports = purchaseService.getPurchaseReportByDate();
-        return ResponseEntity.ok(reports);
-    }
+
 
     @GetMapping("/{id}")
     public ResponseEntity<Purchase> getPurchaseById(@PathVariable Integer id) {

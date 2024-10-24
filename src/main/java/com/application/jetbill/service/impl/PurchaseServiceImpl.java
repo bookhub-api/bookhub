@@ -3,6 +3,7 @@ package com.application.jetbill.service.impl;
 import com.application.jetbill.dto.PurchaseCreateDTO;
 import com.application.jetbill.dto.PurchaseDTO;
 import com.application.jetbill.dto.PurchaseReportDTO;
+import com.application.jetbill.exception.BadRequestException;
 import com.application.jetbill.exception.ResourceNotFoundException;
 import com.application.jetbill.mapper.PurchaseMapper;
 import com.application.jetbill.model.entity.Book;
@@ -60,10 +61,24 @@ public class PurchaseServiceImpl implements PurchaseService {
                 .toList();
     }
 
+    @Transactional(readOnly = true)
     @Override
     public List<PurchaseReportDTO> getPurchaseReportByDate() {
-        return null;
+        try {
+            return purchaseRepository.getPurchaseReportByDate().stream()
+                    .map(result -> new PurchaseReportDTO (
+                            (Integer) result[0],
+                            (String)result[1])).toList();
+
+        }catch (ClassCastException e){
+            throw new BadRequestException("Error al convertir los resultados de la consulta "+e);
+        }catch (Exception e){
+            throw new ResourceNotFoundException("Ocurrió un error al obtener el reporte de compras.");
+        }
+
     }
+
+
 
     @Override
     public List<Purchase> getAllPurchases() {
