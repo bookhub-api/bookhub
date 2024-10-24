@@ -41,13 +41,8 @@ public class PurchaseServiceImpl implements PurchaseService {
         });
         purchase.setCreatedAt(LocalDateTime.now());
         purchase.setPaymentStatus(PaymentStatus.PENDING);
-
         // Calcular el total basado en la cantidad de libros comprados
-        Float total = purchase.getItems()
-                .stream()
-                .map(item -> item.getPrice() * item.getQuantity())
-                .reduce(0f, Float::sum);
-
+        Float total = getPurchaseTotal(purchase);
         purchase.setTotal(total);//se asigna el total de la compra
         Purchase savedPurchase = purchaseRepository.save(purchase);
         return purchaseMapper.toPurchaseDTO(savedPurchase);
@@ -82,7 +77,7 @@ public class PurchaseServiceImpl implements PurchaseService {
 
     @Override
     public List<Purchase> getAllPurchases() {
-        return null;
+        return purchaseRepository.findAll();
     }
 
     @Override
@@ -92,6 +87,17 @@ public class PurchaseServiceImpl implements PurchaseService {
 
     @Override
     public Purchase getPurchaseById(Integer id) {
-        return null;
+        return purchaseRepository.findById(id).orElseThrow(()-> new ResourceNotFoundException("Purchase not found"));
     }
+
+    private Float getPurchaseTotal(Purchase purchase){
+        return purchase.getItems()
+                .stream()
+                .map(item -> item.getPrice() * item.getQuantity())
+                .reduce(0f, Float::sum);
+
+    }
+
 }
+
+
