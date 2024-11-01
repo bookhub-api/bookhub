@@ -1,6 +1,6 @@
 package com.application.jetbill.model.entity;
 
-import com.application.jetbill.model.enums.Role;
+import com.application.jetbill.model.enums.ERole;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -10,32 +10,26 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @Entity
-@Table(name = "customers")
+@Table(name = "users")
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column(name = "first_name")
-    private String firstName;
 
-    @Column(name = "last_name")
-    private String lastName;
-
-    @Column(name = "full_name")
-    private String fullName;
-
+    @Column(nullable = false, unique = true)
     private String email;
 
     private String password;
 
-    @Column(name = "created_at", nullable = false)
-    private LocalDateTime createdAt;
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+    private Customer customer;
 
-    @Column(name = "updated_at")
-    private LocalDateTime updatedAt;
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+    private Author author;
 
-    @Enumerated(EnumType.STRING)
-    @Column(name = "role")
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name="role_id", referencedColumnName = "id")
     private Role role;
+
 }
