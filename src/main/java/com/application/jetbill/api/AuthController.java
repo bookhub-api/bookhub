@@ -1,8 +1,10 @@
 package com.application.jetbill.api;
 
 
-import com.application.jetbill.model.entity.User;
+import com.application.jetbill.dto.UserProfileDto;
+import com.application.jetbill.dto.UserRegistrationDto;
 import com.application.jetbill.service.UserService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,9 +21,19 @@ public class AuthController {
 
     private final UserService userService;
 
-    @PostMapping("/register")
-    public ResponseEntity<User> register(@RequestBody User user){
-        User userRegister = userService.reguisterUser(user);
-        return  new ResponseEntity<>(userRegister, HttpStatus.CREATED);
+    // Endpoint para registrar clientes
+    @PostMapping("/register/customer")
+    public ResponseEntity<UserProfileDto> registerCustomer(@Valid @RequestBody UserRegistrationDto registrationDto){
+        UserProfileDto userProfile = userService.registerCustomer(registrationDto);
+        return  new ResponseEntity<>(userProfile, HttpStatus.CREATED);
     }
+
+    // Endpoint para registrar autores
+    @PostMapping("/register/author")
+    public ResponseEntity<UserProfileDto> registerAuthor(@Valid @RequestBody UserRegistrationDto userRegistrationDto) {
+        UserProfileDto userProfile = userService.registerAuthor(userRegistrationDto);
+        return new ResponseEntity<>(userProfile, HttpStatus.CREATED);
+    }
+
+
 }

@@ -25,11 +25,13 @@ public class UserMapper {
             userProfileDto.setFirstName(user.getCustomer().getFirstName());
             userProfileDto.setLastName(user.getCustomer().getLastName());
             userProfileDto.setShippingAddress(user.getCustomer().getShippingAddress());
+            userProfileDto.setRole(user.getRole().getName());
         }
         if(user.getAuthor()!=null){
             userProfileDto.setFirstName(user.getAuthor().getFirstName());
             userProfileDto.setLastName(user.getAuthor().getLastName());
             userProfileDto.setBio(user.getAuthor().getBio());
+            userProfileDto.setRole(user.getRole().getName());
         }
         return userProfileDto;
     }
