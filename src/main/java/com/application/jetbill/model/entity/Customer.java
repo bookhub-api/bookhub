@@ -1,6 +1,5 @@
 package com.application.jetbill.model.entity;
 
-
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -10,20 +9,20 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @Entity
-@Table(name = "authors")
-public class Author {
+@Table(name = "customers")
+public class Customer {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column(name = "first_name", nullable = false)
+    @Column(name = "first_name")
     private String firstName;
 
-    @Column(name = "last_name", nullable = false)
+    @Column(name = "last_name")
     private String lastName;
 
-    @Column(name = "bio", columnDefinition = "TEXT")
-    private String bio;
+    @Column(name = "shipping_address", nullable = false)
+    private String shippingAddress;
 
     @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt;

@@ -51,7 +51,7 @@ public class PurchaseServiceImpl implements PurchaseService {
     @Override
     @Transactional(readOnly = true)
     public List<PurchaseDTO> getPurchaseHistoryByUserId(Integer userId) {
-        return purchaseRepository.findByCustomerId(userId).stream()
+        return purchaseRepository.findByUserId(userId).stream()
                 .map(purchaseMapper::toPurchaseDTO)
                 .toList();
     }

@@ -27,9 +27,9 @@ public class PurchaseMapper {
         Purchase purchase = modelMapper.map(purchaseDTO, Purchase.class);
 
         //Mapear manualmente el cliente
-        User customer = new User();
-        customer.setId(purchaseDTO.getCustomerId());
-        purchase.setCustomer(customer);
+        User user = new User();
+        user.setId(purchaseDTO.getCustomerId());
+        purchase.setUser(user);
 
         //Mapear manualmente los items de la compra
         purchase.setItems(purchaseDTO.getItems().stream()
@@ -44,7 +44,7 @@ public class PurchaseMapper {
         PurchaseDTO purchaseDTO = modelMapper.map(purchase, PurchaseDTO.class);
 
         //Mapear manualmente el nombre del cliente
-        purchaseDTO.setCustomerName(purchase.getCustomer().getFirstName()+" "+purchase.getCustomer().getLastName());
+        //purchaseDTO.setUserName(purchase.getUser().+" "+purchase.getCustomer().getLastName());
 
         //Mapear manualmente los items de la compra
         purchaseDTO.setItems(purchase.getItems().stream()

@@ -10,8 +10,7 @@ import java.util.Optional;
 
 public interface AuthorRepository extends JpaRepository<Author, Integer> {
 
-    //Optional<Author> findByFirstNameAndLastName(String firstName, String lastName);
-
+    Optional<Author> findByFirstNameAndLastName(String firstName, String lastName);
     boolean existsByFirstNameAndLastName(String firstName, String lastName);
     boolean existsByFirstNameAndLastNameAndIdNot(String firstName, String lastName, Integer id);
 

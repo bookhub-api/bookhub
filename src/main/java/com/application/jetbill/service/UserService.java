@@ -1,7 +1,12 @@
 package com.application.jetbill.service;
 
-import com.application.jetbill.model.entity.User;
+import com.application.jetbill.dto.UserProfileDto;
+import com.application.jetbill.dto.UserRegistrationDto;
+
 
 public interface UserService {
-    User reguisterUser(User user);
+    UserProfileDto registerCustomer(UserRegistrationDto registrationDto);
+    UserProfileDto registerAuthor(UserRegistrationDto registrationDto);
+    UserProfileDto updateUserProfile(Integer id, UserProfileDto userProfileDto);
+    UserProfileDto getUserProfileById(Integer id);
 }

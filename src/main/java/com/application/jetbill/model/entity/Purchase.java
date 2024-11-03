@@ -28,7 +28,7 @@ public class Purchase {
     @ManyToOne
     @JoinColumn(name = "customer_id", referencedColumnName = "id"
             , foreignKey = @ForeignKey(name = "FK_purchase_customer"))
-    private User customer;
+    private User user;
 
     @OneToMany(mappedBy = "purchase", cascade = CascadeType.ALL)
     private List<PurchaseItem> items;
