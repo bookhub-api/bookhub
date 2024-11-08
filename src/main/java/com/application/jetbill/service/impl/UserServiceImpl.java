@@ -1,6 +1,8 @@
 package com.application.jetbill.service.impl;
 
 
+import com.application.jetbill.dto.AuthResponseDTO;
+import com.application.jetbill.dto.LoginDTO;
 import com.application.jetbill.dto.UserProfileDto;
 import com.application.jetbill.dto.UserRegistrationDto;
 import com.application.jetbill.exception.BadRequestException;
@@ -13,9 +15,13 @@ import com.application.jetbill.model.entity.User;
 import com.application.jetbill.model.enums.ERole;
 import com.application.jetbill.repository.RoleRepository;
 import com.application.jetbill.repository.UserRepository;
+import com.application.jetbill.security.UserPrincipal;
 import com.application.jetbill.service.UserService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -31,6 +37,7 @@ public class UserServiceImpl implements UserService {
     private final RoleRepository roleRepository;
     private final PasswordEncoder passwordEncoder;
     private final UserMapper userMapper;
+    private final AuthenticationManager authenticationManager;
 
 
 
@@ -80,6 +87,19 @@ public class UserServiceImpl implements UserService {
         User user = optionalUser.orElseThrow(() -> new ResourceNotFoundException("Usuario no encontrado"));
         // Convertir a UserProfileDTO para la respuesta
         return userMapper.toDto(user);
+    }
+
+    @Override
+    public AuthResponseDTO login(LoginDTO loginDTO) {
+        //autenticar al usuario utilizando  AuthenticationManager
+        Authentication authentication = authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(loginDTO.getEmail(), loginDTO.getPassword())
+        );
+
+        // Una vez autenticado, el objeto authentication obtiene la información del usuario autenticado
+        UserPrincipal userPrincipal = (UserPrincipal)  authentication.getPrincipal();
+        User user = userPrincipal.getUser();
+        return userMapper.toAuthResponseDTO(user, "uhhfdfoh");
     }
 
     // Método genérico para registrar un usuario con un rol específico

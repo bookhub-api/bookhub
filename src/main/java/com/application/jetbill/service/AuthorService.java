@@ -10,7 +10,7 @@ public interface AuthorService {
     List<AuthorDTO> getAll();
     Page<AuthorDTO> paginate(Pageable pageable);
     AuthorDTO findById(Integer id);
-    AuthorDTO create(AuthorDTO AuthorDTO);
+    AuthorDTO create(AuthorDTO authorDTO);
     AuthorDTO update(Integer id, AuthorDTO updateAuthorDTO);
     void delete(Integer id);
 }
